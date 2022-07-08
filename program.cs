@@ -52,10 +52,11 @@ namespace _100PrisonerRiddleTest
             }
 
             int timesRun = 0;
+            int timesLost = 0;
 
             AgainFindNumbers:
             var rng = new Random();
-            rng.Shuffle(box);
+            rng.Randomize(box);
             timesRun++;
 
             for (int i = 0; i < prisoners.Length; i++)
@@ -63,8 +64,8 @@ namespace _100PrisonerRiddleTest
                 int prisoner = prisoners[i];
                 int number = box[prisoner];
                 int timesSearched = 0;
-                
-                for(int x = 0; x < 50; x++)
+
+                for (int x = 0; x < 50; x++)
                 {
                     if(number != prisoner || timesSearched > 50)
                     {
@@ -79,23 +80,26 @@ namespace _100PrisonerRiddleTest
                 }
                 else if(number != prisoner)
                 {
+                    timesLost++;
                     Console.WriteLine($"Prisoner({prisoner}) searched 50 boxes and didn't find his number");
-                    Console.WriteLine($"The prisoners has lost a total of {timesRun} times");
+                    Console.WriteLine($"The prisoners has lost a total of {timesLost} times");
                     Console.WriteLine("Trying again");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     Console.Clear();
                     goto AgainFindNumbers;
                 }
             }
 
             Console.WriteLine($"After {timesRun} tries all prisoners found their numbers");
+            Console.WriteLine("Would you like to continue?");
+            goto again;
         }
-
-        public static void Shuffle<T>(this Random rng, T[] array)
+        
+        public static void Randomize<T>(this Random rng, T[] array)
         {
             int n = array.Length;
             while (n > 1)
-            {
+            {   
                 int k = rng.Next(n--);
                 T temp = array[n];
                 array[n] = array[k];
